@@ -1,3 +1,4 @@
+import 'package:bloc_equatable_impl/features/product/extensions/product_status_ext.dart';
 import 'package:bloc_equatable_impl/features/product/presentation/bloc/product_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,15 +86,20 @@ class ProductPage extends StatelessWidget {
               const SizedBox(height: 20),
 
               BlocBuilder<ProductBloc, ProductState>(
-                builder: (_, state) {
-                  if (state.status ==
-                      ProductStatus.submitting) {
-                    return const CircularProgressIndicator();
-                  }
+                builder: (context, state) {
+                 if(state.status.isLoading){
+                   return const CircularProgressIndicator();
+                 }
 
+                 if (state.status.isSuccess){
+                   return const Text("Success");
+                 }
+
+                 if(state.showError){
+                   return Text(state.errorMessage ?? "Error");
+                 }
                   return ElevatedButton(
-                    onPressed: state.status ==
-                        ProductStatus.valid
+                    onPressed: state.canSubmit
                         ? () => context
                         .read<ProductBloc>()
                         .add(const SubmitProduct())
