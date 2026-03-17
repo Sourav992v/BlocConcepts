@@ -1,3 +1,5 @@
+import 'package:bloc_equatable_impl/app/config/app_config.dart';
+import 'package:bloc_equatable_impl/app/config/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -5,6 +7,7 @@ import 'features/product/presentation/bloc/product_bloc.dart';
 import 'features/product/presentation/pages/product_page.dart';
 
 void main() {
+  AppConfig.init();
   runApp(const MyApp());
 }
 
