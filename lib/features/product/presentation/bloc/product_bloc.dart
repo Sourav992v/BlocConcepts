@@ -1,12 +1,13 @@
+import 'package:bloc_equatable_impl/core/mixins/validation_mixin.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'product_event.dart';
 import 'product_state.dart';
 
-class ProductBloc extends Bloc<ProductEvent, ProductState> {
+class ProductBloc extends Bloc<ProductEvent, ProductState> with ValidationMixin{
   ProductBloc() : super(const ProductFormState()) {
 
     on<TitleChanged>((event, emit) {
-      final isValid = event.title.isNotEmpty && state.price > 0;
+      final isValid = isValidTitle(event.title) && isValidPrice(state.price);
 
       emit(
         state.copyWith(
@@ -18,12 +19,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<DescriptionChanged>((event, emit) {
-      emit(state.copyWith(description: event.description));
+
+      final isValid = isValidDescription(event.description);
+      emit(state.copyWith(description: isValid ? event.description : ""));
     });
 
     on<PriceChanged>((event, emit) {
       final isValid =
-          state.title.isNotEmpty && event.price > 0;
+          isValidTitle(state.title) && isValidPrice(event.price);
 
       emit(
         state.copyWith(
